@@ -31,21 +31,14 @@ public class RegistrationDto {
                 .statusCode(200);
     }
 
-    public static NewUser setNewActiveUser() {
-        Faker faker = new Faker();
-        String login = faker.name().fullName();
-        String password = faker.internet().password();
-        String status = "active";
-        NewUser registration = new NewUser(login, password, status);
-        setNewUser(registration);
-        return registration;
-    }
 
-    public static NewUser setNewBlockedUser() {
-        Faker faker = new Faker();
-        String login = faker.name().fullName();
+    public static NewUser setNewActiveUser(Faker faker) {
+        NewUser newUser = new NewUser();
+        String login =  faker.name().fullName();
+        newUser.setLogin(login);
         String password = faker.internet().password();
-        String status = "blocked";
+        newUser.setPassword(password);
+        String status = "active";
         NewUser registration = new NewUser(login, password, status);
         setNewUser(registration);
         return registration;
