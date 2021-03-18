@@ -16,25 +16,48 @@ import static com.codeborne.selenide.Selenide.open;
 
 
 class RegistrationDtoTest {
-    Faker faker = new Faker();
-    NewUser newUser = new NewUser();
+    private static Faker faker = new Faker(new Locale("en"));
 
     @BeforeEach
     void shouldOpenWeb() {
         open("http://localhost:9999");
-        faker = new Faker(new Locale("eng"));
-        newUser = new NewUser();
-    }
 
+    }
 
     @Test
-    void shouldAccept() {
-        RegistrationDto.setNewActiveUser(faker);
-        $("[data-test-id=login] [class = input__control]").setValue(newUser.getLogin());
-        $("[data-test-id=password] [class = input__control]")
-                .setValue(newUser.getPassword());
+    void shouldAcceptValidActiveUser() {
+        UserInfo userInfo = DataGenerator.getRegisteredUser("active");
+        $("[data-test-id=login] [class = input__control]").setValue(userInfo.getLogin());
+        $("[data-test-id=password] [class = input__control]").setValue(userInfo.getPassword());
         $(byText("Продолжить")).click();
-        $(withText("  Личный кабинет")).shouldBe(Condition.visible, Duration.ofSeconds(15));
-
+        $(withText("Личный кабинет")).shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
+
+    @Test
+    void shouldRejectInvalidLoginActiveUser() {
+        UserInfo userInfo = DataGenerator.getRegisteredUser("active");
+        $("[data-test-id=login] [class = input__control]").setValue(faker.name().fullName());
+        $("[data-test-id=password] [class = input__control]").setValue(userInfo.getPassword());
+        $(byText("Продолжить")).click();
+        $(withText("Ошибка"+"Неверно указан логин или пароль")).shouldBe(Condition.visible, Duration.ofSeconds(15));
+    }
+
+    @Test
+    void shouldRejectInvalidPasswordActiveUser() {
+        UserInfo userInfo = DataGenerator.getRegisteredUser("active");
+        $("[data-test-id=login] [class = input__control]").setValue(userInfo.getLogin());
+        $("[data-test-id=password] [class = input__control]").setValue(faker.internet().password());
+        $(byText("Продолжить")).click();
+        $(withText("Ошибка"+"Неверно указан логин или пароль")).shouldBe(Condition.visible, Duration.ofSeconds(15));
+    }
+
+    @Test
+    void shouldRejectValidBlockedUser() {
+        UserInfo userInfo = DataGenerator.getRegisteredUser("blocked");
+        $("[data-test-id=login] [class = input__control]").setValue(userInfo.getLogin());
+        $("[data-test-id=password] [class = input__control]").setValue(userInfo.getPassword());
+        $(byText("Продолжить")).click();
+        $(withText("Пользователь заблокирован")).shouldBe(Condition.visible, Duration.ofSeconds(15));
+    }
+
 }

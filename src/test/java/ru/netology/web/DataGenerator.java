@@ -7,10 +7,16 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 
 
+import java.util.Locale;
+
 import static io.restassured.RestAssured.given;
 
 
-public class RegistrationDto {
+public class DataGenerator {
+    private static Faker faker = new Faker(new Locale("en"));
+
+    private DataGenerator() {
+    }
 
     public static RequestSpecification requestSpecification = new RequestSpecBuilder()
             .setBaseUri("http://localhost")
@@ -21,7 +27,7 @@ public class RegistrationDto {
             .build();
 
 
-    public static void setNewUser(NewUser registration) {
+    public static void setNewUser(UserInfo registration) {
         given()
                 .spec(requestSpecification) // указываем, какую спецификацию используем
                 .body(registration) // передаём в теле объект, который будет преобразован в JSON
@@ -32,14 +38,10 @@ public class RegistrationDto {
     }
 
 
-    public static NewUser setNewActiveUser(Faker faker) {
-        NewUser newUser = new NewUser();
-        String login =  faker.name().fullName();
-        newUser.setLogin(login);
+    public static UserInfo getRegisteredUser(String status) {
+        String login = faker.name().fullName();
         String password = faker.internet().password();
-        newUser.setPassword(password);
-        String status = "active";
-        NewUser registration = new NewUser(login, password, status);
+        UserInfo registration = new UserInfo(login, password, status);
         setNewUser(registration);
         return registration;
     }
