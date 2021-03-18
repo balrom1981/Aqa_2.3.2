@@ -39,7 +39,7 @@ class RegistrationDtoTest {
         $("[data-test-id=login] [class = input__control]").setValue(faker.name().fullName());
         $("[data-test-id=password] [class = input__control]").setValue(userInfo.getPassword());
         $(byText("Продолжить")).click();
-        $(withText("Ошибка"+"Неверно указан логин или пароль")).shouldBe(Condition.visible, Duration.ofSeconds(15));
+        $(withText("Неверно указан логин или пароль")).shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
 
     @Test
@@ -48,7 +48,7 @@ class RegistrationDtoTest {
         $("[data-test-id=login] [class = input__control]").setValue(userInfo.getLogin());
         $("[data-test-id=password] [class = input__control]").setValue(faker.internet().password());
         $(byText("Продолжить")).click();
-        $(withText("Ошибка"+"Неверно указан логин или пароль")).shouldBe(Condition.visible, Duration.ofSeconds(15));
+        $(withText("Неверно указан логин или пароль")).shouldBe(Condition.visible, Duration.ofSeconds(15));
     }
 
     @Test
