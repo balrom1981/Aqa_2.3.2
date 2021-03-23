@@ -36,7 +36,7 @@ class RegistrationDtoTest {
     @Test
     void shouldRejectInvalidLoginActiveUser() {
         UserInfo userInfo = DataGenerator.getRegisteredUser("active");
-        $("[data-test-id=login] [class = input__control]").setValue(faker.name().fullName());
+        $("[data-test-id=login] [class = input__control]").setValue(DataGenerator.getNewLogin());
         $("[data-test-id=password] [class = input__control]").setValue(userInfo.getPassword());
         $(byText("Продолжить")).click();
         $(withText("Неверно указан логин или пароль")).shouldBe(Condition.visible, Duration.ofSeconds(15));
@@ -46,7 +46,7 @@ class RegistrationDtoTest {
     void shouldRejectInvalidPasswordActiveUser() {
         UserInfo userInfo = DataGenerator.getRegisteredUser("active");
         $("[data-test-id=login] [class = input__control]").setValue(userInfo.getLogin());
-        $("[data-test-id=password] [class = input__control]").setValue(faker.internet().password());
+        $("[data-test-id=password] [class = input__control]").setValue(DataGenerator.getNewPassword());
         $(byText("Продолжить")).click();
         $(withText("Неверно указан логин или пароль")).shouldBe(Condition.visible, Duration.ofSeconds(15));
     }

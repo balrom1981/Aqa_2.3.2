@@ -46,4 +46,12 @@ public class DataGenerator {
         return registration;
     }
 
+    public static String getNewLogin(){
+        return faker.name().fullName();
+    }
+
+    public static String getNewPassword(){
+        return faker.internet().password();
+    }
+
 }
